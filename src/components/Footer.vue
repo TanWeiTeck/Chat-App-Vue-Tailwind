@@ -21,7 +21,7 @@
             <a href="#">Privacy Policy</a>
         </div>
         <form
-            @submit.prevent="toggleasubscription"
+            @submit.prevent="toggleSubscription"
             class="flex flex-col space-y-3"
         >
             <h1 class="text-blue-800 text-sm">Newsletter Subscription</h1>
@@ -39,7 +39,7 @@
                 </labelc>
             </div>
 
-            <btn class="h-8"> SINGN UP NOW !</btn>
+            <btn class="h-8"> SIGN UP NOW !</btn>
         </form>
     </div>
     <div>
