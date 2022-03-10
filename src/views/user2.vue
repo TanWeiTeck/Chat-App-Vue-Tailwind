@@ -1,5 +1,5 @@
 <template>
-    <div class="text-sm h-full overflow-y-auto relative">
+    <div class="text-sm h-full overflow-y-auto relative min-w-[320px]">
         <!-- header -->
         <header
             class="flex bg-white justify-between items-center px-4 h-12 sticky top-0 shadow-lg"
@@ -11,32 +11,31 @@
                     />
 
                     <div class="flex flex-col">
-                        <h3 class="font-medium">USER-2</h3>
-                        <p class="text-gray-400">last seen time</p>
+                        <h3 class="font-medium">{{ name }}</h3>
+                        <p class="text-xs text-gray-400">last seen</p>
                     </div>
                 </div>
             </div>
 
             <div class="flex items-center">
-                <btn @click="toggleOffer" class="hidden sm:block">
-                    Custom Offer</btn
-                >
+                <btn class="" @click="toggleOffer"> Custom Offer</btn>
 
-                <div class="flex h-6 pl-5 space-x-1 md:space-x-3">
+                <div class="flex h-6 sm:pl-5 space-x-1 md:space-x-3">
                     <img
-                        class="opacity-40 hover:opacity-100"
+                        class="opacity-40 hover:opacity-100 cursor-pointer hidden sm:block"
                         src="https://img.icons8.com/ios/50/000000/mail.png"
                     />
                     <img
-                        class="rotate-90 opacity-40 hover:opacity-100 cursor-pointer"
+                        class="rotate-90 opacity-40 hover:opacity-100 cursor-pointer hidden sm:block"
                         src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-tag-interface-kiranshastry-lineal-kiranshastry.png"
                     />
                     <img
-                        class="opacity-40 hover:opacity-100"
+                        class="opacity-40 hover:opacity-100 cursor-pointer hidden sm:block"
                         src="https://img.icons8.com/ios/52/000000/star--v1.png"
                     />
+
                     <img
-                        class="rotate-90 opacity-40 hover:opacity-100"
+                        class="sm:rotate-90 opacity-40 hover:opacity-100"
                         src="https://img.icons8.com/fluency-systems-filled/48/000000/menu-2--v1.png"
                     />
                 </div>
@@ -57,6 +56,15 @@
                 }"
             >
                 <div
+                    v-if="message.offer"
+                    class="bg-white max-w-2xl rounded-2xl"
+                    :class="{ 'bg-blue-200': message.user }"
+                >
+                    <offerCard :offer="message" />
+                </div>
+
+                <div
+                    v-if="message.text"
                     class="bg-white max-w-2xl p-3 rounded-2xl"
                     :class="{ 'bg-blue-200': message.user }"
                 >
@@ -68,6 +76,7 @@
                 </div>
             </div>
         </div>
+
         <!-- end chats -->
         <!-- message input -->
         <div class="flex p-3 bg-white justify-between w-auto sticky bottom-0">
@@ -81,25 +90,26 @@
                     type="text"
                     placeholder="message here..."
                 />
-                <div class="flex py-2 px-6 space-x-2">
-                    <label class="min-w-fit">
+                <div class="flex px-2 bg-opacity-20 items-center space-x-2">
+                    <label>
                         <img
-                            class="opacity-30 w-9 hover:opacity-100"
+                            class="opacity-30 w-10 hover:opacity-100"
                             src="https://img.icons8.com/ios-glyphs/60/000000/attach.png"
                         />
                         <input class="hidden" type="file" />
                     </label>
-
-                    <img
-                        class="opacity-30 hover:opacity-100"
-                        src="https://img.icons8.com/external-neu-royyan-wijaya/64/000000/external-emoji-neu-emoji-neu-royyan-wijaya-4.png"
-                    />
+                    <div>
+                        <img
+                            class="opacity-30 w-9 hover:opacity-100"
+                            src="https://img.icons8.com/external-neu-royyan-wijaya/64/000000/external-emoji-neu-emoji-neu-royyan-wijaya-4.png"
+                        />
+                    </div>
                 </div>
             </div>
             <button
                 @keyup.enter="addMessage"
                 @click="addMessage"
-                class="flex px-4 items-center m-auto text-xl text-blue-800 space-x-2"
+                class="flex px-0 md:px-4 items-center m-auto text-xl text-blue-800 space-x-2"
             >
                 <span class="hidden md:block">SEND</span>
 
@@ -143,14 +153,20 @@
 </template>
 
 <script>
+import { TransitionGroup } from '@vue/runtime-dom';
 import btn from '../assets/btnwhite.vue';
+import offerCard from '../assets/offerCard.vue';
+
 export default {
-    name: 'chatBox',
+    name: 'chatbox',
     components: {
         btn,
+        offerCard,
     },
+
     data() {
         return {
+            name: 'USER-2',
             tempMessage: '',
             // dummy data
             messages: [
@@ -168,6 +184,16 @@ export default {
                     text: 'Lorem, ipsum dolor sit amet commodi! Possimus perferendis repudiandae iusto nemo totam. Expedita deleniti nulla, nobis dignissimos a omnis architecto repellat aperiam. Consequuntur architecto autem assumenda culpa voluptatibus vero, sit aut.',
                     time: '16/01/2022 12:12pm',
                     user: true,
+                },
+                {
+                    offer: true,
+                    label: "Talent's package name",
+                    description:
+                        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas repellendus aspernatur ea autem labore corporis vel accusantium, assumenda vero architecto.',
+                    time: 'dd/mm/yy',
+                    budget: '$100 (fixed amount)',
+                    accepted: false,
+                    user: false,
                 },
                 {
                     text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. In possimus ducimus itaque iusto molestias animi repellendus ad modi incidunt aut? Soluta autem magni corrupti commodi! Possimus perferendis repudiandae iusto nemo totam. Expedita deleniti nulla, nobis dignissimos a omnis architecto repellat aperiam. Consequuntur architecto autem assumenda culpa voluptatibus vero, sit aut.',
@@ -190,14 +216,73 @@ export default {
     },
     methods: {
         toggleOffer() {
-            alert('We do not have any offer now');
+            const labelInput = prompt('please enter project name');
+            if (labelInput) {
+                const descriptionInput = prompt(
+                    'please enter project descriptions'
+                );
+                const timeInput = prompt(
+                    'please enter expected delivery time (dd/mm/yy)',
+                    'dd/mm/yy'
+                );
+                const budgetInput = prompt(
+                    'please enter your budget (USD)',
+                    '$'
+                );
+                this.messages.push({
+                    offer: true,
+                    label: labelInput,
+                    description: descriptionInput,
+                    time: timeInput,
+                    budget: budgetInput,
+                    accepted: false,
+                    user: true,
+                });
+                alert('Offer Added!!');
+            } else {
+                alert('No Offer Added, Please specify Project Name!');
+            }
+        },
+
+        twoDigits(num) {
+            return num.toString().padStart(2, '0');
+        },
+
+        formatHour(num) {
+            let time = num.toString();
+            if (time == 0) {
+                return (time = 12);
+            } else if (time > 12) {
+                return (time -= 12);
+            } else {
+                return time;
+            }
+        },
+
+        checkAMPM(num) {
+            if (num >= 12) {
+                return 'pm';
+            } else {
+                return 'am';
+            }
         },
 
         addMessage(e) {
             if (this.tempMessage) {
                 this.messages.push({
                     text: this.tempMessage,
-                    time: 'message time',
+                    time:
+                        this.twoDigits(new Date().getDate()) +
+                        '/' +
+                        this.twoDigits(new Date().getMonth() + 1) +
+                        '/' +
+                        new Date().getFullYear() +
+                        ' ' +
+                        this.formatHour(new Date().getHours()) +
+                        ':' +
+                        this.twoDigits(new Date().getMinutes()) +
+                        this.checkAMPM(new Date().getHours()),
+
                     user: true,
                 });
                 this.tempMessage = '';

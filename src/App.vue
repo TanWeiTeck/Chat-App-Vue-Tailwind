@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router';
 import chatNav from './components/chatNav.vue';
 import Footer from './components/Footer.vue';
+import offerCard from './assets/offerCard.vue';
 </script>
 
 <template>
@@ -9,6 +10,10 @@ import Footer from './components/Footer.vue';
         <div class="hidden md:block">
             <chatNav />
         </div>
+        <div v-if="$route.path === '/'" class="md:hidden w-screen">
+            <chatNav />
+        </div>
+
         <div class="bg-white grow">
             <RouterView />
         </div>
