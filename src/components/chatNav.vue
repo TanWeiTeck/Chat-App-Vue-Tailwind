@@ -1,7 +1,5 @@
 <template>
-    <div
-        class="border text-sm min-w-[18rem] bg-red-300 h-full md:h-full overflow-auto"
-    >
+    <div class="border text-sm min-w-[18rem] h-full md:h-full overflow-auto">
         <!-- header -->
         <div
             class="flex bg-white shadow-lg justify-between items-center px-4 h-12 sticky top-0"
